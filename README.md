@@ -1,24 +1,47 @@
-# README
+# Sahha Biomarkers API Microservice
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project is a Rails API microservice that surfaces at least 3 biomarkers (e.g., heart rate, calories burnt, sleep data) using the Sahha.ai API. It is built using Ruby on Rails, PostgreSQL as the database, and various development and testing tools.
 
-Things you may want to cover:
+## Prerequisites
 
-* Ruby version
+Before you begin, ensure you have the following installed:
 
-* System dependencies
+- **rbenv** for Ruby version management
+- **Ruby 3.2.2**
+- **Rails 7.1.4**
+- **PostgreSQL**
+- **Bundler**
+- **Git**
 
-* Configuration
+### 1. Install rbenv and Ruby
 
-* Database creation
+1. **Install rbenv** (for managing Ruby versions):
 
-* Database initialization
+   - **macOS (Homebrew)**:
+     ```bash
+     brew install rbenv
+     rbenv init
+     ```
 
-* How to run the test suite
+   - **Ubuntu/Debian**:
+     ```bash
+     sudo apt update
+     sudo apt install -y rbenv
+     ```
 
-* Services (job queues, cache servers, search engines, etc.)
+   Add rbenv to your shell:
+   ```bash
+   echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+   exec $SHELL
+   ```
 
-* Deployment instructions
+### 2. Install Rails
 
-* ...
+Once Ruby is installed, install Rails globally:
+
+```bash
+gem install rails -v 7.1.4
+   ```
+
+   
