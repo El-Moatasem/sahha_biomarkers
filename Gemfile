@@ -15,6 +15,9 @@ gem "puma", ">= 5.0"
 # For CORS handling (useful if your API will be accessed from a browser or other domains)
 gem "rack-cors"
 
+# For environment variable handling
+gem 'dotenv-rails', groups: [:development, :test]
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -33,11 +36,20 @@ group :development, :test do
 
   # RuboCop for code linting and style checking
   gem "rubocop", require: false
+
+  # SimpleCov for test coverage
+  gem "simplecov", require: false, group: :test
+end
+
+group :development do
+  # Speed up commands on slow machines / big apps (optional)
+  gem "spring"
 end
 
 group :production do
   # Add Redis for Sidekiq or caching if needed (optional)
-  # gem "redis", ">= 4.0.1"
+  gem "redis", ">= 4.0.1"
+
+  # Use Lograge to reduce and simplify logs in production
+  gem "lograge"
 end
-
-
