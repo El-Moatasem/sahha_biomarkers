@@ -88,18 +88,18 @@ DATABASE_PORT=5432
 
 # Development database settings
 DEVELOPMENT_DB_NAME=sahha_biomarkers_development
-DEVELOPMENT_DB_USERNAME=postgres
-DEVELOPMENT_DB_PASSWORD=your_password
+DEVELOPMENT_DB_USERNAME=database_developer
+DEVELOPMENT_DB_PASSWORD=developer_password
 
 # Test database settings
 TEST_DB_NAME=sahha_biomarkers_test
-TEST_DB_USERNAME=postgres
-TEST_DB_PASSWORD=your_password
+TEST_DB_USERNAME=database_developer
+TEST_DB_PASSWORD=developer_password
 
 # Production database settings
 PRODUCTION_DB_NAME=sahha_biomarkers_production
-PRODUCTION_DB_USERNAME=your_production_username
-PRODUCTION_DB_PASSWORD=your_production_password
+PRODUCTION_DB_USERNAME=database_developer
+PRODUCTION_DB_PASSWORD=developer_password
 ```
 
 Create and migrate the database:
