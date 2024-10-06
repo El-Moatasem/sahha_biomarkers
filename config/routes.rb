@@ -9,4 +9,8 @@ Rails.application.routes.draw do
 
   # POST route for registering profile
   post 'biomarkers/register_profile', to: 'biomarkers#register_profile'
+   # GET route for fetching profile biomarkers
+  get 'biomarkers/profile_biomarkers', to: 'biomarkers#get_profile_biomarkers'
 end
+
+

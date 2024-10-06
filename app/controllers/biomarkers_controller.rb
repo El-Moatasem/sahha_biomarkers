@@ -1,5 +1,3 @@
-# app/controllers/biomarkers_controller.rb
-
 class BiomarkersController < ApplicationController
   before_action :set_sahha_service
 
@@ -14,8 +12,6 @@ class BiomarkersController < ApplicationController
   def sleep
     render json: @sahha_service.fetch_biomarker('sleep')
   end
-
-
 
   def create
     biomarker = Biomarker.new(biomarker_params)
@@ -33,6 +29,16 @@ class BiomarkersController < ApplicationController
     render json: result
   end
 
+  def get_profile_biomarkers
+    external_id = params[:externalId]
+    categories = params[:categories]
+    types = params[:types]
+    start_date_time = params[:startDateTime]
+    end_date_time = params[:endDateTime]
+    
+    result = @sahha_service.get_profile_biomarkers(categories, types, start_date_time, end_date_time, external_id)
+    render json: result
+  end
 
   private
 
@@ -43,7 +49,4 @@ class BiomarkersController < ApplicationController
   def biomarker_params
     params.require(:biomarker).permit(:biomarker_type, :recorded_at, value: {})
   end
-
-
-
 end
