@@ -22,13 +22,13 @@ class BiomarkersController < ApplicationController
       log_entry = {
         id: params[:externalId],
         parentId: params[:externalId],
-        logType: biomarker.biomarker_type, # Fix: Changed from `biotype` to `biomarker_type`
+        logType: biomarker.biomarker_type, 
         dataType: biomarker.value["unit"],
         value: biomarker.value["average"],
         unit: biomarker.value["unit"],
-        source: "iPhone X",
+        source: "WebAPIs",
         recordingMethod: "RECORDING_METHOD_UNKNOWN",
-        deviceType: "iPhone13,2",
+        deviceType: "",
         startDateTime: biomarker.recorded_at.iso8601,
         endDateTime: biomarker.recorded_at.iso8601,
         additionalProperties: ""
