@@ -14,33 +14,36 @@ class BiomarkersController < ApplicationController
   end
 
 
-  def create
-    biomarker = Biomarker.new(biomarker_params)
+def create
+  biomarker = Biomarker.new(biomarker_params)
+  external_id = params[:externalId] # Ensure externalId is passed in request
 
-    puts("create_log_entry", params[:externalId])
-    if biomarker.save
-      log_entry = {
-        id: params[:externalId],
-        parentId: params[:externalId],
-        logType: biomarker.biomarker_type, 
-        dataType: biomarker.value["unit"],
-        value: biomarker.value["average"],
-        unit: biomarker.value["unit"],
-        source: "WebAPIs",
-        recordingMethod: "RECORDING_METHOD_UNKNOWN",
-        deviceType: "",
-        startDateTime: biomarker.recorded_at.iso8601,
-        endDateTime: biomarker.recorded_at.iso8601,
-        additionalProperties: ""
-      }
+  if biomarker.save
+    log_entry = {
+      id: external_id,  # Setting the externalId
+      parentId: external_id,
+      logType: biomarker.biomarker_type,
+      dataType: biomarker.value["unit"],
+      value: biomarker.value["average"],
+      unit: biomarker.value["unit"],
+      source: "WebAPIs",
+      recordingMethod: "RECORDING_METHOD_UNKNOWN",
+      deviceType: "No devices", 
+      startDateTime: biomarker.recorded_at.iso8601,
+      endDateTime: biomarker.recorded_at.iso8601,
+      additionalProperties: {} 
+    }
 
-      @sahha_service.log_profile_data([log_entry])
+    @sahha_service.log_profile_data([log_entry], external_id) # Pass external_id to log_profile_data
 
-      render json: { status: 'Biomarker created successfully', data: biomarker }, status: :created
-    else
-      render json: { error: 'Failed to create biomarker', details: biomarker.errors.full_messages }, status: :unprocessable_entity
-    end
+    render json: { status: 'Biomarker created successfully', data: biomarker }, status: :created
+  else
+    render json: { error: 'Failed to create biomarker', details: biomarker.errors.full_messages }, status: :unprocessable_entity
   end
+end
+
+
+
 
 
   def register_profile

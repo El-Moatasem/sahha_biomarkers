@@ -72,13 +72,13 @@ class SahhaService
     handle_response(response)
   end
 
-  # New method to log profile data
-  def log_profile_data(log_entries)
-    puts("log_entries", log_entries.to_json,)
-    response = self.class.post('/profile/data/log', body: log_entries.to_json, headers: profile_auth_headers)
-    puts("log_profile_data", response)
-    handle_response(response)
-  end
+# New method to log profile data
+def log_profile_data(log_entries, external_id)
+  get_profile_token(external_id) # Ensure we get the profile token using the external_id
+  puts("log_entries", log_entries.to_json)
+  response = self.class.post('/profile/data/log', body: log_entries.to_json, headers: profile_auth_headers)
+  handle_response(response)
+end
 
   private
 
@@ -87,7 +87,7 @@ class SahhaService
   end
 
   def profile_auth_headers
-    { "Authorization" => "profile #{@profile_token}", "Content-Type" => "application/json" }
+    { "Authorization" => "Bearer #{@profile_token}", "Content-Type" => "application/json" }
   end
 
   def handle_response(response)
