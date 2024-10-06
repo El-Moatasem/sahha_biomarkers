@@ -23,7 +23,7 @@ def create
       id: external_id,  # Setting the externalId
       parentId: external_id,
       logType: biomarker.biomarker_type,
-      dataType: biomarker.value["unit"],
+      dataType: biomarker.biomarker_type,
       value: biomarker.value["average"],
       unit: biomarker.value["unit"],
       source: "WebAPIs",
@@ -41,7 +41,6 @@ def create
     render json: { error: 'Failed to create biomarker', details: biomarker.errors.full_messages }, status: :unprocessable_entity
   end
 end
-
 
 
 
