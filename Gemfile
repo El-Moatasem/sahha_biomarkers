@@ -18,6 +18,9 @@ gem "rack-cors"
 # For environment variable handling
 gem 'dotenv-rails', groups: [:development, :test]
 
+# HTTP requests
+gem 'httparty'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

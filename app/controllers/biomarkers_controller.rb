@@ -1,20 +1,20 @@
-class BiomarkersController < ApplicationController
-  before_action :set_sahha_headers, only: [:heart_rate, :calories, :sleep]
+# app/controllers/biomarkers_controller.rb
 
-  # Fetch biomarker data from Sahha API
+class BiomarkersController < ApplicationController
+  before_action :set_sahha_service
+
   def heart_rate
-    render json: fetch_biomarker('heart-rate')
+    render json: @sahha_service.fetch_biomarker('heart-rate')
   end
 
   def calories
-    render json: fetch_biomarker('calories')
+    render json: @sahha_service.fetch_biomarker('calories')
   end
 
   def sleep
-    render json: fetch_biomarker('sleep')
+    render json: @sahha_service.fetch_biomarker('sleep')
   end
 
-  # Create a biomarker record in the local database
   def create
     biomarker = Biomarker.new(biomarker_params)
 
@@ -25,48 +25,25 @@ class BiomarkersController < ApplicationController
     end
   end
 
+
+
+  def register_profile
+    external_id = params[:external_id]
+    result = @sahha_service.register_profile(external_id)
+    render json: result
+  end
+
+
   private
 
-  # Set up Sahha headers with the authenticated token
-  def set_sahha_headers
-    @token = authenticate
-    @headers = {
-      "Authorization" => "Bearer #{@token}",
-      "Content-Type" => "application/json"
-    }
+  def set_sahha_service
+    @sahha_service = SahhaService.new
   end
 
-  # Fetch a biomarker from the Sahha API
-  def fetch_biomarker(type)
-    response = HTTParty.get("https://sandbox-api.sahha.ai/v1/biomarkers/#{type}", headers: @headers)
-    if response.success?
-      response.parsed_response
-    else
-      render json: { error: "Failed to fetch #{type} biomarker data", details: response.parsed_response }, status: :bad_request
-    end
-  end
-
-  # Authenticate with the Sahha API using Client Id and Secret
-  def authenticate
-    response = HTTParty.post(
-      "https://sandbox-api.sahha.ai/auth/token",
-      body: {
-        client_id: ENV['SAHHA_CLIENT_ID'],
-        client_secret: ENV['SAHHA_CLIENT_SECRET'],
-        grant_type: 'client_credentials'
-      }.to_json,
-      headers: { 'Content-Type' => 'application/json' }
-    )
-
-    if response.success?
-      response.parsed_response['access_token']
-    else
-      raise "Failed to authenticate with Sahha API: #{response.parsed_response['error']}"
-    end
-  end
-
-  # Strong parameters for biomarker creation
   def biomarker_params
     params.require(:biomarker).permit(:biomarker_type, :recorded_at, value: {})
   end
+
+
+
 end
