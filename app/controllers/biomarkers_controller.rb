@@ -17,10 +17,11 @@ class BiomarkersController < ApplicationController
   def create
     biomarker = Biomarker.new(biomarker_params)
 
+    puts("create_log_entry", params[:externalId])
     if biomarker.save
       log_entry = {
-        id: "",
-        parentId: "",
+        id: params[:externalId],
+        parentId: params[:externalId],
         logType: biomarker.biomarker_type, # Fix: Changed from `biotype` to `biomarker_type`
         dataType: biomarker.value["unit"],
         value: biomarker.value["average"],
