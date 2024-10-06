@@ -22,13 +22,13 @@ def create
     log_entry = {
       id: external_id,  # Setting the externalId
       parentId: external_id,
-      logType: biomarker.biomarker_type,
-      dataType: biomarker.biomarker_type,
+      logType: params[:biomarker][:category],  # Using category from params
+      dataType: biomarker.biomarker_type,  # Specific biomarker type
       value: biomarker.value["average"],
       unit: biomarker.value["unit"],
       source: "WebAPIs",
       recordingMethod: "RECORDING_METHOD_UNKNOWN",
-      deviceType: "No devices", 
+      deviceType: "No devices",
       startDateTime: biomarker.recorded_at.iso8601,
       endDateTime: biomarker.recorded_at.iso8601,
       additionalProperties: {} 
@@ -69,6 +69,7 @@ end
   end
 
   def biomarker_params
-    params.require(:biomarker).permit(:biomarker_type, :recorded_at, value: {})
+    params.require(:biomarker).permit(:biomarker_type, :recorded_at, :category, value: {})
   end
+
 end
