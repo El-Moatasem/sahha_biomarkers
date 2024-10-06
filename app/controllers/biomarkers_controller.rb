@@ -1,3 +1,7 @@
+
+
+require 'securerandom'
+
 class BiomarkersController < ApplicationController
   before_action :set_sahha_service
 
@@ -20,15 +24,15 @@ def create
 
   if biomarker.save
     log_entry = {
-      id: external_id,  # Setting the externalId
-      parentId: external_id,
+      id: SecureRandom.uuid,  
+      parentId: nil,
       logType: biomarker.category, # use biomarker type
       dataType: biomarker.biomarker_type, 
       value: biomarker.value["average"],
       unit: biomarker.value["unit"],
       source: "WebAPIs",
       recordingMethod: "RECORDING_METHOD_UNKNOWN",
-      deviceType: "No devices", 
+      deviceType: external_id, 
       startDateTime: biomarker.recorded_at.iso8601,
       endDateTime: biomarker.recorded_at.iso8601,
       additionalProperties: {},
