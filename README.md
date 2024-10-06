@@ -1,6 +1,6 @@
 # Sahha Biomarkers API Microservice
 
-This repository is a Rails-based API microservice that utilizes the Sahha.ai API to surface biomarkers.
+This repository is a Rails-based API microservice that utilizes the Sahha.ai API to surface and log biomarkers.
 
 ## Prerequisites
 - Ruby version: **3.2.2** (managed by rbenv)
@@ -12,24 +12,18 @@ This repository is a Rails-based API microservice that utilizes the Sahha.ai API
 ## Installation Guide
 
 ### 1. Install Ruby
-Install Ruby using rbenv or another Ruby version manager. Ensure you are using Ruby **3.2.2**.
+Install Ruby using rbenv or another version manager. Ensure Ruby **3.2.2** is used.
 
 ### 2. Install Rails
-Once Ruby is installed, install Rails globally:
+Install Rails globally and verify the installation:
 
 ```bash
 gem install rails -v 7.1.4
+rails -v  # should output Rails 7.1.4
 ```
-
-Verify the Rails installation:
-
-```bash
-rails -v
-```
-This should show `Rails 7.1.4`.
 
 ### 3. Install PostgreSQL
-To install PostgreSQL on your machine:
+To install PostgreSQL:
 
 #### Ubuntu/Debian:
 ```bash
@@ -40,13 +34,7 @@ sudo apt-get install postgresql postgresql-contrib
 #### macOS (Homebrew):
 ```bash
 brew install postgresql
-```
-
-Ensure PostgreSQL is running:
-
-```bash
-sudo service postgresql start   # Linux
-brew services start postgresql  # macOS
+brew services start postgresql
 ```
 
 ### 4. Clone the Project
@@ -57,86 +45,99 @@ git clone https://github.com/your_username/sahha_biomarkers.git
 cd sahha_biomarkers
 ```
 
-### 5. Install Project Dependencies
-Install Bundler (if not already installed):
+### 5. Install Dependencies
+Install Bundler and project gems:
 
 ```bash
 gem install bundler
-```
-
-Install all necessary gems:
-
-Inside the project directory, run:
-
-```bash
 bundle install
 ```
 
-This will install all dependencies specified in the `Gemfile`, including `pg` (PostgreSQL), `rspec-rails`, and others.
-
 ### 6. Configure the Database
-Set up environment variables:
-
-Create a `.env` file in the project root and populate it with your database credentials.
-
-Example `.env` file:
+Create a `.env` file in the project root and populate it with your database credentials:
 
 ```
-# Common database configuration
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
-
-# Development database settings
 DEVELOPMENT_DB_NAME=sahha_biomarkers_development
-DEVELOPMENT_DB_USERNAME=database_developer
-DEVELOPMENT_DB_PASSWORD=developer_password
-
-# Test database settings
+DEVELOPMENT_DB_USERNAME=postgres
+DEVELOPMENT_DB_PASSWORD=your_password
 TEST_DB_NAME=sahha_biomarkers_test
-TEST_DB_USERNAME=database_developer
-TEST_DB_PASSWORD=developer_password
-
-# Production database settings
-PRODUCTION_DB_NAME=sahha_biomarkers_production
-PRODUCTION_DB_USERNAME=database_developer
-PRODUCTION_DB_PASSWORD=developer_password
+TEST_DB_USERNAME=postgres
+TEST_DB_PASSWORD=your_password
 ```
 
-Create and migrate the database:
+Then create and migrate the database:
 
 ```bash
 rails db:create
 rails db:migrate
 ```
 
-### 7. Running the Application
+### 7. Configure Sahha API
+In the `.env` file, add Sahha API credentials:
+
+```
+SAHHA_SANDBOX_CLIENT_ID=your_client_id
+SAHHA_SANDBOX_CLIENT_SECRET=your_client_secret
+PROFILE_TOKEN= # This will be generated after profile registration
+```
+
+### 8. API Usage
+
+1. **Register Profile**:
+
+   - Endpoint: `POST /biomarkers/register_profile`
+   - Params: `externalId`
+
+2. **Log Biomarker Data**:
+
+   - Endpoint: `POST /biomarkers`
+   - Body:
+   
+   ```json
+   {
+     "biomarker": {
+       "biomarker_type": "heart-rate",
+       "value": { "average": 72, "unit": "bpm" },
+       "recorded_at": "2024-10-05T14:30:00Z",
+       "externalId": "your_external_id"
+     }
+   }
+   ```
+
+3. **Get Profile Biomarkers**:
+
+   - Endpoint: `GET /biomarkers/profile_biomarkers`
+   - Params:
+     - `categories`: ["activity"]
+     - `types`: ["heart-rate"]
+     - `startDateTime`, `endDateTime`: ISO format.
+
+### 9. Running the Application
 To run the Rails server locally:
 
 ```bash
 rails s
 ```
 
-The application will start, and you can access it at [http://localhost:3000](http://localhost:3000).
+Access it at [http://localhost:3000](http://localhost:3000).
 
-### 8. Running Tests
-This project uses **RSpec** for testing. To run the test suite:
+### 10. Running Tests
 
 ```bash
 bundle exec rspec
 ```
 
-### 9. Linting with RuboCop
-To check the code for style violations using **RuboCop**:
+### 11. Linting with RuboCop
 
 ```bash
 bundle exec rubocop
 ```
 
-### 10. Deployment (Optional)
-If you're deploying the app to a platform like Heroku or AWS, ensure you’ve set the environment variables and the database credentials for your production environment.
-
 ## Troubleshooting
 
 ### Common Issues:
-- **PostgreSQL Connection Issues**: Ensure PostgreSQL is running, and the credentials in the `.env` file match your PostgreSQL setup.
+- **401 Unauthorized Errors**: Ensure the profile token is being fetched correctly and the authorization headers are properly set.
+- **PostgreSQL Connection Issues**: Ensure PostgreSQL is running, and the credentials in the `.env` file are correct.
 - **Bundler Not Installing Gems**: Ensure you have the correct Ruby version (**3.2.2**). If you're using rbenv, ensure it's active with the correct version by running `rbenv global 3.2.2`.
