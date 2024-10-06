@@ -72,6 +72,12 @@ class SahhaService
     handle_response(response)
   end
 
+  # New method to log profile data
+  def log_profile_data(log_entries)
+    response = self.class.post('/profile/data/log', body: log_entries.to_json, headers: profile_auth_headers)
+    handle_response(response)
+  end
+
   private
 
   def auth_headers

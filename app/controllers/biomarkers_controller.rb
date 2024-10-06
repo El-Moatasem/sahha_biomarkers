@@ -13,15 +13,34 @@ class BiomarkersController < ApplicationController
     render json: @sahha_service.fetch_biomarker('sleep')
   end
 
+
   def create
     biomarker = Biomarker.new(biomarker_params)
 
     if biomarker.save
+      log_entry = {
+        id: "",
+        parentId: "",
+        logType: biomarker.biomarker_type, # Fix: Changed from `biotype` to `biomarker_type`
+        dataType: biomarker.value["unit"],
+        value: biomarker.value["average"],
+        unit: biomarker.value["unit"],
+        source: "iPhone X",
+        recordingMethod: "RECORDING_METHOD_UNKNOWN",
+        deviceType: "iPhone13,2",
+        startDateTime: biomarker.recorded_at.iso8601,
+        endDateTime: biomarker.recorded_at.iso8601,
+        additionalProperties: ""
+      }
+
+      @sahha_service.log_profile_data([log_entry])
+
       render json: { status: 'Biomarker created successfully', data: biomarker }, status: :created
     else
       render json: { error: 'Failed to create biomarker', details: biomarker.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
 
   def register_profile
     external_id = params[:externalId]
