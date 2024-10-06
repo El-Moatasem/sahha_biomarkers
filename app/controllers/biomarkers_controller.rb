@@ -15,6 +15,8 @@ class BiomarkersController < ApplicationController
     render json: @sahha_service.fetch_biomarker('sleep')
   end
 
+
+
   def create
     biomarker = Biomarker.new(biomarker_params)
 
@@ -25,10 +27,8 @@ class BiomarkersController < ApplicationController
     end
   end
 
-
-
   def register_profile
-    external_id = params[:external_id]
+    external_id = params[:externalId]
     result = @sahha_service.register_profile(external_id)
     render json: result
   end

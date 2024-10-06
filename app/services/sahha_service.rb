@@ -8,6 +8,7 @@ class SahhaService
     @client_secret = ENV['SAHHA_SANDBOX_CLIENT_SECRET']
     @headers = { 'Content-Type' => 'application/json' }
     @token = authenticate
+    puts("accountToken", @token)
   end
 
   def authenticate
@@ -24,6 +25,7 @@ class SahhaService
   end
 
   def register_profile(external_id)
+    puts("external_id", external_id)
     response = self.class.post('/oauth/profile/register', body: {
       externalId: external_id
     }.to_json, headers: auth_headers)
