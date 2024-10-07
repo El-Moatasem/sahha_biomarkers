@@ -1,16 +1,19 @@
 Rails.application.routes.draw do
-  # GET routes for fetching biomarker data
+
+  # Route for retrieving biomarkers based on client_id, external_id, and categories
+  get 'biomarkers/retrieve', to: 'biomarkers#retrieve_biomarkers'
+
+  # Route for heart_rate, calories, and sleep actions
   get 'biomarkers/heart_rate', to: 'biomarkers#heart_rate'
   get 'biomarkers/calories', to: 'biomarkers#calories'
   get 'biomarkers/sleep', to: 'biomarkers#sleep'
 
-  # POST route for creating biomarker data
+  # Route for creating new biomarkers
   post 'biomarkers', to: 'biomarkers#create'
 
-  # POST route for registering profile
+  # Route for registering a profile
   post 'biomarkers/register_profile', to: 'biomarkers#register_profile'
-   # GET route for fetching profile biomarkers
-  get 'biomarkers/profile_biomarkers', to: 'biomarkers#get_profile_biomarkers'
 end
+
 
 

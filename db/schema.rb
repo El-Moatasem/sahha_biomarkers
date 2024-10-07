@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_06_154352) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_07_123756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_06_154352) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "category"
+    t.string "client_id"
+    t.string "external_id"
+    t.index ["client_id"], name: "index_biomarkers_on_client_id"
+    t.index ["external_id"], name: "index_biomarkers_on_external_id"
   end
 
 end
