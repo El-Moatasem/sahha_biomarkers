@@ -68,12 +68,12 @@ class BiomarkersController < ApplicationController
     end
   end
 
-   # Retrieve biomarkers based on client_id, external_id, category, and biomarker_type
+  # Retrieve biomarkers based on client_id, external_id, category, and biomarker_type
   def retrieve_biomarkers
     client_id = ENV['SAHHA_SANDBOX_CLIENT_ID'] # Fetch client ID from ENV
     external_id = params[:externalId]
     categories = params[:categories] # Expecting a list of categories
-    biomarker_type = params[:biomarker_type]
+    biomarker_types = params[:biomarker_types] # Expecting a list of biomarker types
     start_date_time = params[:startDateTime]
     end_date_time = params[:endDateTime]
 
@@ -82,10 +82,10 @@ class BiomarkersController < ApplicationController
 
     # Check if categories is an array and apply the filter using the IN query
     query = query.where(category: categories) if categories.present? && categories.is_a?(Array)
-    
-    # Apply biomarker type filter if provided
-    query = query.where(biomarker_type: biomarker_type) if biomarker_type.present?
-    
+
+    # Check if biomarker_types is an array and apply the filter using the IN query
+    query = query.where(biomarker_type: biomarker_types) if biomarker_types.present? && biomarker_types.is_a?(Array)
+
     # Apply date range filter if both start and end times are provided
     query = query.where(recorded_at: start_date_time..end_date_time) if start_date_time.present? && end_date_time.present?
 
@@ -94,7 +94,6 @@ class BiomarkersController < ApplicationController
 
     render json: result
   end
-
 
 
   private
