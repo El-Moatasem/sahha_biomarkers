@@ -2,23 +2,33 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("DATABASE_HOST") %>
-  port: <%= ENV.fetch("DATABASE_PORT") %>
+  host: <%= ENV.fetch("DATABASE_HOST", 'localhost') %>   # Default to localhost for development/test
+  port: <%= ENV.fetch("DATABASE_PORT", 5432) %>          # Default PostgreSQL port
+  username: <%= ENV.fetch("DATABASE_USERNAME", 'postgres') %>   # Default username for local setup
+  password: <%= ENV.fetch("DATABASE_PASSWORD", 'password') %>   # Default password for local setup
+  sslmode: <%= ENV.fetch("DATABASE_SSL_MODE", 'disable') %>     # Disable SSL for local development
 
 development:
   <<: *default
-  database: <%= ENV.fetch("DEVELOPMENT_DB_NAME") %>
-  username: <%= ENV.fetch("DEVELOPMENT_DB_USERNAME") %>
-  password: <%= ENV.fetch("DEVELOPMENT_DB_PASSWORD") %>
+  database: <%= ENV.fetch("DEVELOPMENT_DB_NAME", 'sahha_biomarkers_development') %>
+  username: <%= ENV.fetch("DEVELOPMENT_DB_USERNAME", 'postgres') %>
+  password: <%= ENV.fetch("DEVELOPMENT_DB_PASSWORD", 'password') %>
 
 test:
   <<: *default
-  database: <%= ENV.fetch("TEST_DB_NAME") %>
-  username: <%= ENV.fetch("TEST_DB_USERNAME") %>
-  password: <%= ENV.fetch("TEST_DB_PASSWORD") %>
+  database: <%= ENV.fetch("TEST_DB_NAME", 'sahha_biomarkers_test') %>
+  username: <%= ENV.fetch("TEST_DB_USERNAME", 'postgres') %>
+  password: <%= ENV.fetch("TEST_DB_PASSWORD", 'password') %>
 
 production:
   <<: *default
   database: <%= ENV.fetch("PRODUCTION_DB_NAME") %>
   username: <%= ENV.fetch("PRODUCTION_DB_USERNAME") %>
   password: <%= ENV.fetch("PRODUCTION_DB_PASSWORD") %>
+  host: <%= ENV.fetch("DATABASE_HOST") %>               # Ensure this is set in production
+  port: <%= ENV.fetch("DATABASE_PORT", 5432) %>
+  sslmode: require                                      # Enable SSL for production for security
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>    # Increase the pool size for production
+
+  # If you're using Amazon RDS, make sure your database is using SSL in production.
+  # The SSL certificate can be automatically verified, or you can provide the path to the cert.
