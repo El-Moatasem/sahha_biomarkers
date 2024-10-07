@@ -10,9 +10,6 @@ Rails.application.routes.draw do
 
   # Route for creating new biomarkers
   post 'biomarkers', to: 'biomarkers#create'
-
-  # Route for registering a profile
-  post 'biomarkers/register_profile', to: 'biomarkers#register_profile'
 end
 
 
