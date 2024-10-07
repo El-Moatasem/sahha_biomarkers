@@ -200,19 +200,5 @@ heroku config:set SAHHA_SANDBOX_CLIENT_ID=new-client-id --app sahha-apis-app
 heroku config:set SAHHA_SANDBOX_CLIENT_SECRET=new-client-secret --app sahha-apis-app
 ```
 
-## Running Tests
-This project uses **RSpec** for testing. To run the test suite:
-
-```bash
-bundle exec rspec
-```
-
-## Linting
-Use **RuboCop** to check the code for style violations:
-
-```bash
-bundle exec rubocop
-```
-
 ## Conclusion
 This API microservice allows you to log and retrieve biomarker data using the Sahha.ai API. It is deployed on Heroku and can be easily managed through the environment variables. For any changes, simply update the configurations and redeploy to Heroku.
